@@ -73,6 +73,8 @@ git config --global pull.rebase false
 git config --global push.autoSetupRemote true
 git config --global http.postBuffer 500M
 git config --global http.maxRequestBuffer 100M
+git config --global pack.windowMemory 10m
+git config --global pack.packSizeLimit 20m
 git config --global color.ui auto
 echo "Git settings applied."
 
