@@ -69,7 +69,7 @@ git config --global core.ignorecase false
 git config --global core.autocrlf input
 git config --global core.compression 0
 git config --global fetch.prune true
-git config --global pull.rebase false
+git config --global pull.rebase true
 git config --global push.autoSetupRemote true
 git config --global http.postBuffer 500M
 git config --global http.maxRequestBuffer 100M
@@ -79,8 +79,12 @@ git config --global color.ui auto
 echo "Git settings applied."
 
 # iTerm2 settings
-open -a iTerm "iTerm2 State.itermexport"
-echo "iTerm2 settings imported."
+if open -Ra "iTerm"; then
+    open -a iTerm "iTerm2 State.itermexport"
+    echo "iTerm2 settings imported."
+else
+    echo "iTerm2 is not installed."
+fi
 
 # VSCode
 vscode_dir="$HOME/.vscode/extensions"
