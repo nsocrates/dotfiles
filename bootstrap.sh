@@ -52,7 +52,7 @@ echo "Installing packages from Brewfile..."
 brew bundle install --file Brewfile
 
 # Dots
-DOTFILES=("dots/.zprofile" "dots/.zshrc")
+DOTFILES=("dots/.zprofile" "dots/.zshrc" "dots/.gitignore")
 for file in "${DOTFILES[@]}"; do
     bk_cp "$file" "$HOME/$file"
 done
@@ -68,6 +68,7 @@ fi
 git config --global core.ignorecase false
 git config --global core.autocrlf input
 git config --global core.compression 0
+git config --global core.excludesfile ~/.gitignore
 git config --global fetch.prune true
 git config --global pull.rebase true
 git config --global push.autoSetupRemote true

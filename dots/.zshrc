@@ -13,8 +13,10 @@ export PYTEST_ADDOPTS="--color=yes"
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
 eval "$(pyenv init -)"
+
+# pipenv
+export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
 
 # Homebrew shell completion
 if type brew &>/dev/null; then
@@ -35,6 +37,40 @@ function arm() {
 function intel() {
   echo "Setting architecture to x86_64"
   env /usr/bin/arch -x86_64 /bin/zsh --login
+}
+
+function ghook() {
+    local FILE_CONTENT='#!/bin/sh
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
+if [ ! -z "$JIRA_TICKET" ]; then
+    COMMIT_MSG=$(cat $1)
+    echo "$JIRA_TICKET: $COMMIT_MSG" > $1
+fi'
+    local TARGET_FILE=".git/hooks/prepare-commit-msg"
+
+    if [ -f "$TARGET_FILE" ]; then
+        echo "File '$TARGET_FILE' already exists"
+        return 1
+    fi
+
+    mkdir -p "$(dirname "$TARGET_FILE")"
+    echo "$FILE_CONTENT" > "$TARGET_FILE"
+    chmod +x "$TARGET_FILE"
+    echo "File '$TARGET_FILE' created"
+}
+
+function gcommit() {
+    local BRANCH_NAME=$(git symbolic-ref --short HEAD)
+    local JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
+    local COMMIT_MSG="$@"
+
+    if [ ! -z "$JIRA_TICKET" ]; then
+        COMMIT_MSG="$JIRA_TICKET: $COMMIT_MSG"
+    fi
+
+    echo "git commit -m $COMMIT_MSG"
+    git commit -m "$COMMIT_MSG"
 }
 
 source "/opt/homebrew/share/antigen/antigen.zsh"
