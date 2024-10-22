@@ -39,6 +39,25 @@ function intel() {
   env /usr/bin/arch -x86_64 /bin/zsh --login
 }
 
+function xmouse() {
+  LENGTH=${1:-1}
+  DELAY=${2:-5}
+
+  MOVEMENTS=(
+    "m:+${LENGTH},+0"
+    "m:+0,+${LENGTH}"
+    "m:-${LENGTH},+0"
+    "m:+0,-${LENGTH}"
+  )
+
+  while true; do
+    for MOVEMENT in "${MOVEMENTS[@]}"; do
+      cliclick $MOVEMENT
+      sleep $DELAY
+    done
+  done
+}
+
 function ghook() {
     local FILE_CONTENT='#!/bin/sh
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
