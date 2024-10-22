@@ -1,5 +1,5 @@
 # zsh settings
-unsetopt AUTO_CD
+# unsetopt AUTO_CD
 
 # Sublime
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"

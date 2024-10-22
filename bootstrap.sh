@@ -77,6 +77,7 @@ git config --global http.maxRequestBuffer 100M
 git config --global pack.windowMemory 10m
 git config --global pack.packSizeLimit 20m
 git config --global color.ui auto
+git config --global remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
 echo "Git settings applied."
 
 # iTerm2 settings
