@@ -17,6 +17,9 @@ bk_cp() {
 
 # Executes a command and check if it was successful
 cmd() {
+    echo "Executing: $*"
+    "$@"
+    status=$?
     if [ $status -ne 0 ]; then
         echo "Error executing: $*"
         exit 1
