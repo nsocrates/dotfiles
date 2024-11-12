@@ -54,10 +54,9 @@ function xmove() {
     for MOVEMENT in "${MOVEMENTS[@]}"; do
       echo "cliclick $MOVEMENT"
       cliclick $MOVEMENT
-
-      echo "sleep $DELAY"
-      sleep $DELAY
     done
+
+    sleep $DELAY
   done
 }
 
