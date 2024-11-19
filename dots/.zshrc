@@ -56,42 +56,43 @@ function xmove() {
       cliclick $MOVEMENT
     done
 
+    echo "sleep $DELAY"
     sleep $DELAY
   done
 }
 
 function ghook() {
-    local FILE_CONTENT='#!/bin/sh
+  local FILE_CONTENT='#!/bin/sh
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
 JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
-if [ ! -z "$JIRA_TICKET" ]; then
+if [ ! -z "$JIRA_TICKET" ] && [[ ! "$COMMIT_MSG" =~ [A-Z]+-[0-9]+ ]]; then
     COMMIT_MSG=$(cat $1)
     echo "$JIRA_TICKET: $COMMIT_MSG" > $1
 fi'
-    local TARGET_FILE=".git/hooks/prepare-commit-msg"
+  local TARGET_FILE=".git/hooks/prepare-commit-msg"
 
-    if [ -f "$TARGET_FILE" ]; then
-        echo "File '$TARGET_FILE' already exists"
-        return 1
-    fi
+  if [ -f "$TARGET_FILE" ]; then
+    echo "File '$TARGET_FILE' already exists"
+    return 1
+  fi
 
-    mkdir -p "$(dirname "$TARGET_FILE")"
-    echo "$FILE_CONTENT" > "$TARGET_FILE"
-    chmod +x "$TARGET_FILE"
-    echo "File '$TARGET_FILE' created"
+  mkdir -p "$(dirname "$TARGET_FILE")"
+  echo "$FILE_CONTENT" >"$TARGET_FILE"
+  chmod +x "$TARGET_FILE"
+  echo "File '$TARGET_FILE' created"
 }
 
 function gcommit() {
-    local BRANCH_NAME=$(git symbolic-ref --short HEAD)
-    local JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
-    local COMMIT_MSG="$@"
+  local BRANCH_NAME=$(git symbolic-ref --short HEAD)
+  local JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
+  local COMMIT_MSG="$@"
 
-    if [ ! -z "$JIRA_TICKET" ]; then
-        COMMIT_MSG="$JIRA_TICKET: $COMMIT_MSG"
-    fi
+  if [ ! -z "$JIRA_TICKET" ] && [[ ! "$COMMIT_MSG" =~ [A-Z]+-[0-9]+ ]]; then
+    COMMIT_MSG="$JIRA_TICKET: $COMMIT_MSG"
+  fi
 
-    echo "git commit -m $COMMIT_MSG"
-    git commit -m "$COMMIT_MSG"
+  echo "git commit -m \"$COMMIT_MSG\""
+  git commit -m "$COMMIT_MSG"
 }
 
 source "/opt/homebrew/share/antigen/antigen.zsh"
