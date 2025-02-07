@@ -11,13 +11,14 @@ bk_cp() {
         cp "$dest" "$dest.bak"
         echo "Backup of $dest created."
     fi
+
     cp "$src" "$dest"
     echo "$src copied to $dest."
 }
 
 # Executes a command and check if it was successful
 cmd() {
-    echo "Executing: $*"
+    echo "$*"
     "$@"
     status=$?
     if [ $status -ne 0 ]; then
@@ -55,9 +56,11 @@ echo "Installing packages from Brewfile..."
 brew bundle install --file Brewfile
 
 # Dots
-DOTFILES=("dots/.zprofile" "dots/.zshrc" "dots/.gitignore")
-for file in "${DOTFILES[@]}"; do
-    bk_cp "$file" "$HOME/$file"
+DOTFILES=(".zprofile" ".zshrc" ".gitignore")
+for filename in "${DOTFILES[@]}"; do
+    src="${SCRIPT_DIR}/dots/${filename}"
+    dest="$HOME/$filename"
+    bk_cp "$src" "$dest"
 done
 
 # gitconfig
