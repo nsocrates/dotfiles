@@ -61,38 +61,35 @@ function xmove() {
   done
 }
 
-function ghook() {
-  local FILE_CONTENT='#!/bin/sh
-BRANCH_NAME=$(git symbolic-ref --short HEAD)
-JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
-if [ ! -z "$JIRA_TICKET" ] && [[ ! "$COMMIT_MSG" =~ [A-Z]+-[0-9]+ ]]; then
-    COMMIT_MSG=$(cat $1)
-    echo "$JIRA_TICKET: $COMMIT_MSG" > $1
-fi'
-  local TARGET_FILE=".git/hooks/prepare-commit-msg"
+function gcommit() {
+  local BRANCH_NAME=$(git symbolic-ref --short HEAD 2>/dev/null)
+  local JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
+  local args=()
+  local next_is_msg=0
 
-  if [ -f "$TARGET_FILE" ]; then
-    echo "File '$TARGET_FILE' already exists"
-    return 1
-  fi
+  for arg in "$@"; do
+    if [[ $next_is_msg -eq 1 ]]; then
+      if [ ! -z "$JIRA_TICKET" ] && [[ ! "$arg" =~ $JIRA_TICKET ]]; then
+        arg="$JIRA_TICKET: $arg"
+      fi
+      args+=("$arg")
+      next_is_msg=0
+    elif [[ "$arg" == "-m" || "$arg" == "--message" ]]; then
+      args+=("$arg")
+      next_is_msg=1
+    else
+      args+=("$arg")
+    fi
+  done
 
-  mkdir -p "$(dirname "$TARGET_FILE")"
-  echo "$FILE_CONTENT" >"$TARGET_FILE"
-  chmod +x "$TARGET_FILE"
-  echo "File '$TARGET_FILE' created"
+  echo "git commit ${args[@]}"
+  git commit "${args[@]}"
 }
 
-function gcommit() {
-  local BRANCH_NAME=$(git symbolic-ref --short HEAD)
-  local JIRA_TICKET=$(echo $BRANCH_NAME | grep -oE "[A-Z]+-[0-9]+")
-  local COMMIT_MSG="$@"
-
-  if [ ! -z "$JIRA_TICKET" ] && [[ ! "$COMMIT_MSG" =~ [A-Z]+-[0-9]+ ]]; then
-    COMMIT_MSG="$JIRA_TICKET: $COMMIT_MSG"
-  fi
-
-  echo "git commit -m \"$COMMIT_MSG\""
-  git commit -m "$COMMIT_MSG"
+function gpushdt() {
+  git add .
+  git commit -m "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+  git push $*
 }
 
 source "/opt/homebrew/share/antigen/antigen.zsh"
