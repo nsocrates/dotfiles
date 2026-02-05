@@ -71,7 +71,6 @@ else
     echo "Git is already installed."
 fi
 
-git config --global user.email nsocrates@users.noreply.github.com
 git config --global core.ignorecase false
 git config --global core.autocrlf input
 git config --global core.compression 0
