@@ -51,12 +51,13 @@ function xmove() {
   )
 
   while true; do
+	dt=$(date '+%Y-%m-%d %H:%M:%S')
     for MOVEMENT in "${MOVEMENTS[@]}"; do
-      echo "cliclick $MOVEMENT"
+      echo "${dt} - cliclick $MOVEMENT"
       cliclick $MOVEMENT
     done
 
-    echo "sleep $DELAY"
+    echo "${dt} - sleep $DELAY"
     sleep $DELAY
   done
 }
