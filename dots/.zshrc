@@ -8,15 +8,15 @@ export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
 # pytest
-export PYTEST_ADDOPTS="--color=yes"
+# export PYTEST_ADDOPTS="--color=yes"
 
 # pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 # pipenv
-export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+# export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
 
 # Homebrew shell completion
 if type brew &>/dev/null; then
@@ -112,10 +112,10 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle chriskempson/base16-shell
 
 # Plugin for installing, updating and loading nvm
-export NVM_COMPLETION=true
-export NVM_LAZY_LOAD=true
-export NVM_AUTO_USE=true
-antigen bundle lukechilds/zsh-nvm
+# export NVM_COMPLETION=true
+# export NVM_LAZY_LOAD=true
+# export NVM_AUTO_USE=true
+# antigen bundle lukechilds/zsh-nvm
 
 # Type git open to open the repo website
 antigen bundle paulirish/git-open
