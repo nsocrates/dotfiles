@@ -84,6 +84,7 @@ git config --global pack.windowMemory 10m
 git config --global pack.packSizeLimit 20m
 git config --global color.ui auto
 git config --global remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+git config --global credential.helper osxkeychain
 echo "Git settings applied."
 
 # iTerm2 settings
